@@ -1,6 +1,6 @@
 library(shiny)
 library(htmltools)
-library(rsconnect)
+#library(rsconnect)
 
 source("tomble_wordlist.R")
 

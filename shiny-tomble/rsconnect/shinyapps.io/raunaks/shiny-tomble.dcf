@@ -1,0 +1,13 @@
+name: shiny-tomble
+title: shiny-tomble
+username:
+account: raunaks
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5575828
+bundleId: 5539959
+url: https://raunaks.shinyapps.io/shiny-tomble/
+when: 1643916697.74134
+lastSyncTime: 1643916697.74134
+asMultiple: FALSE
+asStatic: FALSE

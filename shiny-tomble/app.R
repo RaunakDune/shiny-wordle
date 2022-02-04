@@ -1,9 +1,18 @@
+#
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    http://shiny.rstudio.com/
+#
+
 library(shiny)
 library(htmltools)
-library(rsconnect)
-
 source("tomble_wordlist.R")
 
+
+# Define UI for application that draws a histogram
 ui <- fluidPage(
   theme = bslib::bs_theme(version = 4),
   title = "Tomble - A Locked Tomb-inspired Wordle App",
@@ -174,7 +183,7 @@ ui <- fluidPage(
   "))
 )
 
-
+# Define server logic required to draw a histogram
 server <- function(input, output) {
   target_word <- reactiveVal(sample(words_common, 1))
   all_guesses <- reactiveVal(list())
@@ -209,7 +218,7 @@ server <- function(input, output) {
     all_guesses(all_guesses_new)
 
     if (isTRUE(check_result$win)) {
-        finished(TRUE)
+      finished(TRUE)
     }
 
     current_guess_letters(character(0))
@@ -281,21 +290,21 @@ server <- function(input, output) {
     # Populate `letter_matches` by iterating over all letters in all the guesses.
     lapply(all_guesses(), function(guess) {
       mapply(guess$letters, guess$matches, SIMPLIFY = FALSE, USE.NAMES = FALSE,
-        FUN = function(letter, match) {
-          prev_match <- letter_matches[[letter]]
-          if (is.null(prev_match)) {
-            # If there isn't an existing entry for that letter, just use it.
-            letter_matches[[letter]] <<- match
-          } else {
-            # If an entry is already present, it can be "upgraded":
-            # "not-in-word" < "in-word" < "correct"
-            if (match == "correct" && prev_match %in% c("not-in-word", "in-word")) {
-              letter_matches[[letter]] <<- match
-            } else if (match == "in-word" && prev_match == "not-in-word") {
-              letter_matches[[letter]] <<- match
-            }
-          }
-        }
+             FUN = function(letter, match) {
+               prev_match <- letter_matches[[letter]]
+               if (is.null(prev_match)) {
+                 # If there isn't an existing entry for that letter, just use it.
+                 letter_matches[[letter]] <<- match
+               } else {
+                 # If an entry is already present, it can be "upgraded":
+                 # "not-in-word" < "in-word" < "correct"
+                 if (match == "correct" && prev_match %in% c("not-in-word", "in-word")) {
+                   letter_matches[[letter]] <<- match
+                 } else if (match == "in-word" && prev_match == "not-in-word") {
+                   letter_matches[[letter]] <<- match
+                 }
+               }
+             }
       )
     })
 
@@ -356,9 +365,9 @@ server <- function(input, output) {
     lines <- lapply(all_guesses(), function(guess) {
       line <- vapply(guess$matches, function(match) {
         switch(match,
-          "correct" = "🟩",
-          "in-word" = "🟨",
-          "not-in-word" = "⬜"
+               "correct" = "🟩",
+               "in-word" = "🟨",
+               "not-in-word" = "⬜"
         )
       }, character(1))
 
@@ -406,4 +415,5 @@ check_word <- function(guess_str, target_str) {
   )
 }
 
-shinyApp(ui, server)
+# Run the application
+shinyApp(ui = ui, server = server)
